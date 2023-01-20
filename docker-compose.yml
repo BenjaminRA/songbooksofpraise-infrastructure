@@ -1,0 +1,39 @@
+version: '3.2'
+
+services:
+  # web:
+  #   build: ./himnario_admin
+  #   # volumes:
+  #   #   - ./himnario_admin:/src/app
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - mongodb
+  # backend:
+  #   build: ./himnario_backend
+  #   volumes:
+  #     - ./himnario_backend:/src/app
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - mongodb
+  redis:
+    image: redis
+    restart: always
+    volumes:
+      - ./redis_db_data:/data
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass "$REDIS_PASSWORD" 
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo_db_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}

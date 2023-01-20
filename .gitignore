@@ -1,0 +1,6 @@
+.env
+mongo_db_data
+himnario_admin
+himnario_backend
+tmp
+redis_db_data
