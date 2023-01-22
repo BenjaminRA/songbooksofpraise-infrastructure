@@ -1,22 +1,24 @@
 version: '3.2'
 
 services:
-  # web:
-  #   build: ./himnario_admin
-  #   # volumes:
-  #   #   - ./himnario_admin:/src/app
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - mongodb
-  # backend:
-  #   build: ./himnario_backend
-  #   volumes:
-  #     - ./himnario_backend:/src/app
-  #   ports:
-  #     - 8080:8080
-  #   depends_on:
-  #     - mongodb
+  admin:
+    build: ${ADMIN_PATH}
+    # volumes:
+    #   - ./himnario_admin:/src/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+      - redis
+  backend:
+    build: ${BACKEND_PATH}
+    # volumes:
+    #   - ./himnario_backend:/src/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+      - redis
   redis:
     image: redis
     restart: always
