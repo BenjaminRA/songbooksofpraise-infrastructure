@@ -50,3 +50,4 @@ WiredTiger
 WiredTiger.*
 mongod.*
 .mongodb
+.terraform
