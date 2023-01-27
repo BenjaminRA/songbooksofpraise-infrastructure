@@ -38,7 +38,7 @@ resource "aws_security_group" "songbooks_of_praise_security_group" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["192.168.0.0/26", "192.168.0.64/26"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 

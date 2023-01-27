@@ -8,14 +8,14 @@ resource "aws_ecs_task_definition" "admin" {
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 1024
-  memory                   = 3072
+  memory                   = 2048
   execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
     {
       name         = "admin"
-      image        = "232527644296.dkr.ecr.us-east-1.amazonaws.com/songbooksofpraise-admin:5"
+      image        = "public.ecr.aws/j4n7b8s5/songbooksofpraise-admin:16"
       cpu          = 1024
-      memory       = 2046
+      memory       = 2048
       essential    = true
       network_mode = "awsvpc"
       portMappings = [
