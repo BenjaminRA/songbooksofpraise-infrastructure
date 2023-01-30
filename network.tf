@@ -1,6 +1,8 @@
 # Declaring VPC
 resource "aws_vpc" "songbooks_of_praise_network" {
   cidr_block = "192.168.0.0/24"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 }
 
 resource "aws_internet_gateway" "songbooks_of_praise_gw" {
@@ -57,6 +59,44 @@ resource "aws_network_interface" "songbooks_of_praise_admin" {
 resource "aws_route_table_association" "songbooks_of_praise_admin" {
   subnet_id      = aws_subnet.songbooks_of_praise_admin.id
   route_table_id = aws_route_table.songbooks_of_praise_route_table.id
+}
+
+resource "aws_lb" "songbooks_of_praise_admin" {
+  security_groups = [aws_security_group.songbooks_of_praise_security_group.id]
+
+  subnet_mapping {
+    subnet_id = aws_subnet.songbooks_of_praise_admin.id
+  }
+}
+
+resource "aws_lb_target_group" "songbooks_of_praise_admin" {
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.songbooks_of_praise_network.id
+  target_type = "ip"
+}
+
+resource "aws_lb_listener" "hello_world" {
+  load_balancer_arn = aws_lb.songbooks_of_praise_admin.id
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.songbooks_of_praise_admin.id
+    type             = "forward"
+  }
+}
+
+resource "aws_route53_record" "songbooks_of_praise_admin" {
+  zone_id = "Z0047145PQEVAFKR3SC2"
+  name    = "admin.songbooksofpraise.com"
+  type    = "A"
+  
+  alias {
+    name                   = aws_lb.songbooks_of_praise_admin.dns_name
+    zone_id                = aws_lb.songbooks_of_praise_admin.zone_id
+    evaluate_target_health = false
+  }
 }
 
 # resource "aws_eip" "songbooks_of_praise_admin" {
